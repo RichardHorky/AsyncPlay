@@ -14,24 +14,23 @@ namespace AsyncPlay
             A = a;
             B = b;
             C = c;
-            Thread thread = new Thread(() => findRoots(this, a, b, c, result));
+            Thread thread = new Thread(() => findRoots(this, result));
             thread.Start();
         }
-
         public double A { get; private set; }
         public double B { get; private set; }
         public double C { get; private set; }
 
-        static void findRoots(ICalc sender, double a, double b, double c, Action<ICalc, double?, double?> result)
+        static void findRoots(ICalc sender, Action<ICalc, double?, double?> result)
         {
 
-            double centerX = -1 * (b / (2 * a));
+            double centerX = -1 * (sender.B / (2 * sender.A));
 
-            Abcx abcx = new Abcx(a, b, c, centerX);//to make it shorter
+            Abcx abcx = new Abcx(sender.A, sender.B, sender.C, centerX);//to make it shorter
             double centerY = quaEq(abcx);
 
             //checks if it doesnt have roots
-            if ((a > 0 && centerY > 0) || a < 0 && centerY < 0)
+            if ((abcx.a > 0 && centerY > 0) || abcx.a < 0 && centerY < 0)
             {
                 result.Invoke(sender, null, null);
                 return;

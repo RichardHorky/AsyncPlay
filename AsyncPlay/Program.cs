@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AsyncPlay
 {
     class Program
     {
+
         static void Main(string[] args)
         {
+            List<(QuadraticClass, double, double, double)> QClassList = new List<(QuadraticClass, double, double, double)>(); 
             do
             {
                 QuadraticClass quadraticClass = new QuadraticClass();
@@ -20,15 +24,19 @@ namespace AsyncPlay
                 if (!double.TryParse(Console.ReadLine(), out double c))
                     break;
 
-                quadraticClass.CalcResult(a, b, c, target);
+                QClassList.Add((quadraticClass,a,b,c));
+
             }
             while (true);
+            
+            QClassList.ForEach(QC => QC.Item1.CalcResult(QC.Item2, QC.Item3, QC.Item4, target));
+
         }
 
         static void target(ICalc sender, double? x1, double? x2)
         {
             Console.WriteLine();
-            Console.WriteLine($"x1: {x1}, x2: {x2}");
+            Console.WriteLine($"Y = {sender.A}x^2 + {sender.B}x + {sender.C} => \t x1: {x1}, \t x2: {x2}");
         }
     }
 }
