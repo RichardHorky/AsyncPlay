@@ -6,20 +6,28 @@ namespace AsyncPlay
     {
         static void Main(string[] args)
         {
-            QuadraticClass quadraticClass = new QuadraticClass();
+            do
+            {
+                QuadraticClass quadraticClass = new QuadraticClass();
 
-            Console.Write("Write a: ");
-            double a = double.Parse(Console.ReadLine());
-            Console.Write("Write b: ");
-            double b = double.Parse(Console.ReadLine());
-            Console.Write("Write c: ");
-            double c = double.Parse(Console.ReadLine());
+                Console.Write("Write a: ");
+                if (!double.TryParse(Console.ReadLine(), out double a))
+                    break;
+                Console.Write("Write b: ");
+                if (!double.TryParse(Console.ReadLine(), out double b))
+                    break;
+                Console.Write("Write c: ");
+                if (!double.TryParse(Console.ReadLine(), out double c))
+                    break;
 
-            quadraticClass.CalcResult(a, b, c, new Action<double?, double?>(target));
+                quadraticClass.CalcResult(a, b, c, target);
+            }
+            while (true);
         }
 
-        static void target(double? x1, double? x2)
+        static void target(ICalc sender, double? x1, double? x2)
         {
+            Console.WriteLine();
             Console.WriteLine($"x1: {x1}, x2: {x2}");
         }
     }

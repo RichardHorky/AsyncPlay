@@ -8,6 +8,9 @@ namespace AsyncPlay
 {
     public interface ICalc
     {
-        void CalcResult(double a, double b, double c, Action<double?, double?> result);
+        void CalcResult(double a, double b, double c, Action<ICalc, double?, double?> result);
+        double A { get; }
+        double B { get; }
+        double C { get; }
     }
 }

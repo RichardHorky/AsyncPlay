@@ -9,13 +9,20 @@ namespace AsyncPlay
 {
     class QuadraticClass : ICalc
     {
-        public void CalcResult(double a, double b, double c, Action<double?, double?> result)
+        public void CalcResult(double a, double b, double c, Action<ICalc, double?, double?> result)
         {
-            Thread thread = new Thread(() => findRoots(a, b, c, result));
+            A = a;
+            B = b;
+            C = c;
+            Thread thread = new Thread(() => findRoots(this, a, b, c, result));
             thread.Start();
         }
 
-        static void findRoots(double a, double b, double c, Action<double?, double?> result)
+        public double A { get; private set; }
+        public double B { get; private set; }
+        public double C { get; private set; }
+
+        static void findRoots(ICalc sender, double a, double b, double c, Action<ICalc, double?, double?> result)
         {
 
             double centerX = -1 * (b / (2 * a));
@@ -26,11 +33,11 @@ namespace AsyncPlay
             //checks if it doesnt have roots
             if ((a > 0 && centerY > 0) || a < 0 && centerY < 0)
             {
-                result.Invoke(null, null);
+                result.Invoke(sender, null, null);
                 return;
             } else if(centerY == 0)
             {
-                result.Invoke(centerX, null);
+                result.Invoke(sender, centerX, null);
                 return;
             }
 
@@ -38,7 +45,7 @@ namespace AsyncPlay
             double rootX2 = Math.Round(getRoot(abcx, step: -1, dir: -1), 2);
 
 
-            result.Invoke(rootX1, rootX2);
+            result.Invoke(sender, rootX1, rootX2);
 
         }
 
